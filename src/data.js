@@ -47,7 +47,7 @@ export const popularProducts = [
   },
   {
     id:2,
-    img:"https://d3o2e4jr3mxnm3.cloudfront.net/Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg.png",
+    img:"https://pngimg.com/uploads/tshirt/tshirt_PNG5436.png",
   },
   {
     id:3,
@@ -55,7 +55,7 @@ export const popularProducts = [
   },
   {
     id:4,
-    img:"https://d3o2e4jr3mxnm3.cloudfront.net/Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg.png",
+    img:"https://pngimg.com/uploads/tshirt/tshirt_PNG5453.png",
   },
   {
     id:5,
@@ -67,7 +67,7 @@ export const popularProducts = [
   },
   {
     id:7,
-    img:"https://d3o2e4jr3mxnm3.cloudfront.net/Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg.png",
+    img:"https://www.freepnglogos.com/uploads/t-shirt-png/t-shirt-png-combed-cotton-crew-neck-shirt-cross-stitch-25.png",
   },
   {
     id:8,
