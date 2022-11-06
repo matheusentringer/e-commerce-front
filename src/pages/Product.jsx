@@ -1,10 +1,12 @@
 import { Add, Remove } from '@mui/icons-material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import Announcement from '../components/Announcement'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import Newsletter from '../components/Newsletter'
+import { publicRequest } from '../requestMethods'
 import { mobile } from '../responsive'
 
 const Container = styled.div`
@@ -69,9 +71,14 @@ const FilterColor = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
+  border: 1px solid black;
   background-color: ${props => props.color};
   margin: 0px 5px;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `
 
 const FilterSize = styled.select`
@@ -119,43 +126,71 @@ const Button = styled.button`
 `
 
 const Product = () => {
+  const location = useLocation()
+  const id = location.pathname.split("/")[2]
+
+  const [product, setProduct] = useState({})
+  const [quantity, setQuantity] = useState(1)
+  const [color, setColor] = useState("")
+  const [size, setSize] = useState("")
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await publicRequest.get("/products/find/"+id)
+        setProduct(res.data)
+      } catch (error) {
+        
+      }
+    }
+    getProduct()
+  }, [id])
+
+  const handleQuantityChange = (type) => {
+    if (type === "dec") {
+      if (quantity > 1) {
+        setQuantity(quantity-1)
+      }
+    } else {
+      setQuantity(quantity+1)
+    }
+  }
+
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
         <ImgContainer>
-          <Image src="https://i.ibb.co/S6qMxwr/jean.jpg" />
+          <Image src={product.image} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Denim Jumpsuit</Title>
+          <Title>{product.title}</Title>
           <Desc>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet autem quibusdam corrupti harum, beatae vel soluta aspernatur repellat fugit praesentium fugiat ad earum itaque rerum corporis inventore cumque blanditiis nihil.
+            {product.description}
           </Desc>
-          <Price>$ 20</Price>
+          <Price>$ {product.price}</Price>
           <FilterContainer>
             <Filter>
-              <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
-              <FilterColor color="darkblue" />
-              <FilterColor color="gray" />
+              <FilterTitle>Color:</FilterTitle>
+              {product.color?.map(c => (
+                <FilterColor color={c} key={c} onClick={() => setColor(c)} />
+              ))}
             </Filter>
             <Filter>
-              <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
+              <FilterTitle>Size:</FilterTitle>
+              <FilterSize onChange={e => setSize(e.target.value)} >
+                {product.size?.map(s => (
+                  <FilterSizeOption key={s}>{s}</FilterSizeOption>
+                ))}
               </FilterSize>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove style={{cursor: "pointer"}} />
-              <Amount>1</Amount>
-              <Add style={{cursor: "pointer"}} />
+              <Remove onClick={() => handleQuantityChange("dec")} style={{cursor: "pointer"}} />
+              <Amount>{quantity}</Amount>
+              <Add onClick={() => handleQuantityChange("inc")} style={{cursor: "pointer"}} />
             </AmountContainer>
             <Button>ADD TO CART</Button>
           </AddContainer>
