@@ -77,10 +77,7 @@ const FilterColor = styled.div`
   background-color: ${props => props.color};
   margin: 0px 5px;
   cursor: pointer;
-
-  &:hover {
-    transform: scale(1.1);
-  }
+  ${props => props.isSelected && "transform: scale(1.2);"}
 `
 
 const FilterSize = styled.select`
@@ -142,6 +139,8 @@ const Product = () => {
       try {
         const res = await publicRequest.get("/products/find/"+id)
         setProduct(res.data)
+        setColor(res.data.color[0])
+        setSize(res.data.size[0])
       } catch (error) {
         
       }
@@ -189,7 +188,7 @@ const Product = () => {
             <Filter>
               <FilterTitle>Color:</FilterTitle>
               {product.color?.map(c => (
-                <FilterColor color={c} key={c} onClick={() => setColor(c)} />
+                <FilterColor color={c} key={c} onClick={() => setColor(c)} isSelected={color === c ? true : false} />
               ))}
             </Filter>
             <Filter>
